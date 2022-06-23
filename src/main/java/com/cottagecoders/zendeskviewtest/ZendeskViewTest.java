@@ -22,16 +22,16 @@ public class ZendeskViewTest {
     try (Zendesk zd = new Zendesk.Builder("https://streamsets.zendesk.com").setUsername(id).setToken(token).setRetry(
         false).build()) {
 
-      try {
-        for (View v : zd.getViews()) {
+      for (View v : zd.getViews()) {
+        try {
           System.out.println("View: " + v);
           for (Ticket t : zd.getView(v.getId())) {
             System.out.println("Ticket: " + t);
           }
+        } catch (ZendeskResponseException ex) {
+          System.out.println("Exception: " + ex.getMessage());
+          ex.printStackTrace();
         }
-      } catch (ZendeskResponseException ex) {
-        System.out.println("Exception: " + ex.getMessage());
-        ex.printStackTrace();
       }
     }
   }
